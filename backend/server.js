@@ -3,19 +3,60 @@ import { Server } from "socket.io";
 import { checkWinner } from "./game-rules.js";
 import { players, socketEvents } from "./utils/constant.js";
 
-const PORT = 8001;
+const PORT = 8000;
 
 // Create HTTP server
-const httpServer = createServer();
+// HTTP server with GET routes
+const httpServer = createServer((req, res) => {
+  // Health check
+  if (req.method === "GET" && req.url === "/health") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({
+        status: "ok",
+        rooms: Object.keys(rooms).length,
+        timestamp: Date.now(),
+      })
+    );
+    return;
+  }
 
-// Attach Socket.IO
-const io = new Server(httpServer, {
-  cors: {
-    origin: process.env.FRONTEND_URL, // allow frontend (later restrict this)
-    methods: ["GET", "POST"],
-  },
+  // List active rooms (optional)
+  if (req.method === "GET" && req.url === "/rooms") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({
+        rooms: Object.keys(rooms),
+      })
+    );
+    return;
+  }
+
+  // Default
+  res.writeHead(404);
+  res.end("Not Found");
 });
 
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "https://tictactoe-play.vercel.app",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+];
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
+      }
+    },
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 const rooms = {};
 
 // Socket events
