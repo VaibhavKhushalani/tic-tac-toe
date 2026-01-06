@@ -1,0 +1,157 @@
+@import "tailwindcss";
+@import "tailwindcss";
+
+:root {
+  /* BASE */
+  --bg: #171717;
+  --foreground: #ffffff;
+  --text: #ffffff;
+
+  /* CARD / HOME UI */
+  --card-bg: #151515;
+  --card-border: rgba(255, 255, 255, 0.12);
+  --option-bg: #1b1b1b;
+
+  /* GAME BOARD */
+  --board-bg: #0f0f0f;
+  --cell-bg: #1a1a1a;
+  --cell-hover: #242424;
+  --grid-line: rgba(255, 255, 255, 0.18);
+
+  /* PLAYER COLORS */
+  --x-color: #6366f1; /* Indigo */
+  --o-color: #22c55e; /* Green */
+
+  /* TEXT */
+  --muted-text: rgba(255, 255, 255, 0.6);
+  --soft-text: rgba(255, 255, 255, 0.4);
+
+  /* ACCENTS */
+  --bot-accent: #6366f1;
+  --human-accent: #22c55e;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* BOARD */
+.main-box {
+  width: 300px;
+  height: 300px;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+
+  background: var(--board-bg);
+  border-radius: 18px;
+  overflow: hidden;
+
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 0 0 1px var(--grid-line);
+}
+
+/* CELL */
+.box {
+  background: var(--cell-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--foreground);
+
+  cursor: pointer;
+  user-select: none;
+
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.box:not(:nth-child(3n)) {
+  border-right: 1px solid var(--grid-line);
+}
+
+.box:not(:nth-last-child(-n + 3)) {
+  border-bottom: 1px solid var(--grid-line);
+}
+
+.box:hover {
+  background: var(--cell-hover);
+}
+
+.box:active {
+  transform: scale(0.95);
+}
+
+.box.x {
+  color: var(--x-color);
+}
+
+.box.o {
+  color: var(--o-color);
+}
+
+/* GRID LINES (classic tic tac toe look) */
+.box:not(:nth-child(3n)) {
+  border-right: 1px solid var(--grid-line);
+}
+
+.box:not(:nth-last-child(-n + 3)) {
+  border-bottom: 1px solid var(--grid-line);
+}
+
+/* INTERACTIONS */
+.box:hover {
+  background: var(--cell-hover);
+}
+
+.box:active {
+  transform: scale(0.95);
+}
+
+.box.filled {
+  cursor: not-allowed;
+}
+
+/* SYMBOL COLORS */
+.box.x {
+  color: var(--x-color);
+}
+
+.box.o {
+  color: var(--o-color);
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.2s ease-out;
+}
+
+@media (max-width: 480px) {
+  .main-box {
+    width: 260px;
+    height: 260px;
+  }
+
+  .box {
+    font-size: 2.5rem;
+  }
+}
