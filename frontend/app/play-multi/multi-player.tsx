@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useState, useEffect } from "react";
 import { socket } from "@/lib/socket";
 import { socketEvents } from "@/lib/constant";
@@ -18,6 +17,7 @@ export default function MultiPlayer() {
   const boxArray: string[] = new Array(9).fill("");
   const params = useSearchParams();
   const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<PlayerSymbol>(players.one);
   const [boxes, setBoxes] = useState<string[]>(boxArray);
   const [winner, setWinner] = useState<PlayerSymbol | "draw" | null>(null);
@@ -63,8 +63,8 @@ export default function MultiPlayer() {
     socket.emit(socketEvents.joinRoom, roomId);
 
     // listeners
-    const handleJoined = (data: any) => {
-      const room = data.room;
+    const handleJoined = ({ room, socketId }: any) => {
+      setUserId(socketId);
       handleGameInfo(room);
     };
 
@@ -88,7 +88,6 @@ export default function MultiPlayer() {
     };
 
     const handleGameReset = ({ board, turn, score }: any) => {
-      console.log(score);
       setBoxes(board);
       setCurrentPlayer(turn);
       setWinner(null);
@@ -114,12 +113,33 @@ export default function MultiPlayer() {
     <div className="relative mx-auto flex w-full max-w-[720px] flex-col items-center px-2 pb-6">
       {/* TOP BAR */}
       <div className="fixed left-0 right-0 gap-10 top-0 z-20 flex items-center justify-between bg-black/60 px-4 py-3 backdrop-blur md:static md:bg-transparent md:backdrop-blur-0">
-        <button
+         <button
           onClick={() => router.push("/")}
           className="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-sm text-zinc-300 hover:bg-zinc-800 transition"
         >
           ← Back
         </button>
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+     
 
         <button
           onClick={handleInvite}
@@ -147,7 +167,10 @@ export default function MultiPlayer() {
                 : "text-zinc-400"
             }`}
           >
-            Player 1 <b className="text-xs">(YOU)</b>
+            Player 1{" "}
+            <b className="text-xs">
+              {playersInfo[0] === userId ? "(YOU)" : ""}
+            </b>
           </span>
 
           <span className="rounded bg-emerald-500/20 px-2 py-0.5 text-xs font-bold text-emerald-400">
@@ -173,7 +196,10 @@ export default function MultiPlayer() {
               currentPlayer === players.two ? "text-sky-400" : "text-zinc-400"
             }`}
           >
-            Player 2
+            Player 2{" "}
+            <b className="text-xs">
+              {playersInfo[1] === userId ? "(YOU)" : ""}
+            </b>
           </span>
 
           <span className="rounded bg-sky-500/20 px-2 py-0.5 text-xs font-bold text-sky-400">

@@ -41,6 +41,7 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
   "https://tictactoe-play.vercel.app",
   "http://localhost:3000",
+  "http://localhost:3001",
   "http://127.0.0.1:3000",
 ];
 
@@ -61,7 +62,7 @@ const rooms = {};
 
 // Socket events
 io.on("connection", (socket) => {
-  console.log("🟢 Client connected:", socket.id);
+  console.log("Client connected:", socket.id);
 
   socket.on(socketEvents.joinRoom, (roomId) => {
     // initialize room if not exists
@@ -162,6 +163,8 @@ io.on("connection", (socket) => {
       score: room.score,
     });
   });
+
+  
 
   socket.on("disconnect", () => {
     const roomId = socket.data.roomId;

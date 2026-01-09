@@ -37,12 +37,12 @@ export default function Home() {
         </p>
 
         {/* Options */}
-        <div className="mt-8 space-y-4">
+      <div className="mt-8 space-y-4">
           {/* Bot */}
           <button
             onClick={() => router.push("/play-bot")}
             className="group w-full flex items-center justify-between px-5 py-4 rounded-xl border border-[var(--card-border)] bg-[var(--option-bg)]
-               transition-all duration-300 hover:scale-[1.03] hover:border-[var(--bot-accent)]"
+               transition-all duration-300 hover:scale-[1.03] hover:border-[var(--bot-accent)] cursor-pointer"
           >
             <div>
               <h3 className="font-semibold text-lg">Play Offline</h3>
@@ -61,7 +61,7 @@ export default function Home() {
               router.push(`/play-multi?roomId=${crypto.randomUUID()}`)
             }
             className="group w-full flex items-center justify-between px-5 py-4 rounded-xl border border-[var(--card-border)] bg-[var(--option-bg)]
-               transition-all duration-300 hover:scale-[1.03] hover:border-[var(--human-accent)]"
+               transition-all duration-300 hover:scale-[1.03] hover:border-[var(--human-accent)] cursor-pointer"
           >
             <div>
               <h3 className="font-semibold text-lg">Play with Human</h3>
@@ -73,7 +73,7 @@ export default function Home() {
               👥
             </span>
           </button>
-        </div>
+        </div>  
 
         {/* Footer */}
         <p
